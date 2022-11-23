@@ -29,6 +29,7 @@ console.log(tslib);
 import { TextDocument } from "vscode-languageserver-textdocument";
 import { parseWord } from "./util/util";
 import { typeTooltip } from "./types/types";
+import { onCompletionArray, resolveCompletion } from "./types/autocompletion";
 
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -230,13 +231,14 @@ connection.onCompletion(
             {
                 label: "TypeScript",
                 kind: CompletionItemKind.Enum, // La classe: permet de classifier les items, pour plus de clarté
-                data: 1,
+                data: -2,
             },
             {
                 label: "JavaScript",
                 kind: CompletionItemKind.Text,
-                data: 2,
+                data: -1,
             },
+            ...onCompletionArray,
         ];
     }
 );
@@ -245,14 +247,20 @@ connection.onCompletion(
 // This handler resolves additional information for the item selected in
 // the completion list.
 connection.onCompletionResolve((item: CompletionItem): CompletionItem => {
-    if (item.data === 1) {
-        item.detail = "TypeScript details";
-        item.documentation = "TypeScript documentation";
-    } else if (item.data === 2) {
-        item.detail = "JavaScript details";
-        item.documentation = "JavaScript documentation";
-    }
-    return item;
+    console.log(item.data);
+    return resolveCompletion(item);
+
+    // if (item.data === -2) {
+    //     item.detail = "TypeScript details";
+    //     item.documentation = "TypeScript documentation";
+    // } else if (item.data === -1) {
+    //     item.detail = "JavaScript details";
+    //     item.documentation = "JavaScript documentation";
+    // } else if (item.data === 3) {
+    //     item.detail = "int details";
+    //     item.documentation = "int documentation";
+    // }
+    // return item;
 });
 
 // TEST: HOVER
