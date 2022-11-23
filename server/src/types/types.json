@@ -1,0 +1,8 @@
+{
+	"int": "integer",
+	"real": "real number",
+	"string": "string",
+	"mesh": "bi-dimensional (2D) finite element meshes",
+	"fespace": "2D finite element spaces",
+	"func": "analytical functions"
+}

@@ -28,6 +28,7 @@ console.log(tslib);
 
 import { TextDocument } from "vscode-languageserver-textdocument";
 import { parseWord } from "./util/util";
+import { typeTooltip } from "./types/types";
 
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -275,15 +276,12 @@ connection.onHover((params: HoverParams): Hover | undefined => {
 
     const word = parseWord(text, params.position.character);
 
-    // Comment scanner pile poil le mot du texte qui va bien?
-    // hhttps://github.com/typescript-language-server/typescript-language-server
+    const tooltip = typeTooltip(word);
 
-    // Le hover est défini ici
-    // https://github.com/typescript-language-server/typescript-language-server/blob/3722b51c0ad8e758c4e42f622bbe25ae981071e1/src/lsp-server.ts#L642
+    if (tooltip === undefined) return undefined;
 
-    const doc: MarkedString[] = ["# Title", `deubg: ${word}`];
     return {
-        contents: doc, // ce truc fonctionne
+        contents: tooltip, // ce truc fonctionne
     };
 });
 
