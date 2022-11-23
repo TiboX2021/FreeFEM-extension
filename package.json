@@ -17,7 +17,7 @@
 		"vscode": "^1.63.0"
 	},
 	"activationEvents": [
-		"onLanguage:plaintext"
+		"onLanguage:freefem"
 	],
 	"main": "./client/out/extension",
 	"contributes": {
