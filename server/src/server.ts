@@ -17,7 +17,6 @@ import {
     InitializeResult,
     HoverParams,
     Hover,
-    MarkedString,
 } from "vscode-languageserver/node";
 
 import tslib from "typescript/lib/tsserverlibrary.js";
@@ -28,8 +27,11 @@ console.log(tslib);
 
 import { TextDocument } from "vscode-languageserver-textdocument";
 import { parseWord } from "./util/util";
-import { typeTooltip } from "./types/types";
-import { onCompletionArray, resolveCompletion } from "./types/autocompletion";
+import {
+    getCompletionItems,
+    getTooltip,
+    resolveCompletion,
+} from "./types/autocompletion";
 
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -238,7 +240,7 @@ connection.onCompletion(
                 kind: CompletionItemKind.Unit,
                 data: -1,
             },
-            ...onCompletionArray,
+            ...getCompletionItems(),
         ];
     }
 );
@@ -247,20 +249,7 @@ connection.onCompletion(
 // This handler resolves additional information for the item selected in
 // the completion list.
 connection.onCompletionResolve((item: CompletionItem): CompletionItem => {
-    console.log(item.data);
     return resolveCompletion(item);
-
-    // if (item.data === -2) {
-    //     item.detail = "TypeScript details";
-    //     item.documentation = "TypeScript documentation";
-    // } else if (item.data === -1) {
-    //     item.detail = "JavaScript details";
-    //     item.documentation = "JavaScript documentation";
-    // } else if (item.data === 3) {
-    //     item.detail = "int details";
-    //     item.documentation = "int documentation";
-    // }
-    // return item;
 });
 
 // TEST: HOVER
@@ -284,7 +273,7 @@ connection.onHover((params: HoverParams): Hover | undefined => {
 
     const word = parseWord(text, params.position.character);
 
-    const tooltip = typeTooltip(word);
+    const tooltip = getTooltip(word);
 
     if (tooltip === undefined) return undefined;
 
