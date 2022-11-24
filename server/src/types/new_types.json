@@ -1,0 +1,44 @@
+[
+	{
+		"name": "int",
+		"tooltip": "integer",
+		"documentation": "",
+		"detail": "int",
+		"kind": "Keyword"
+	},
+	{
+		"name": "real",
+		"tooltip": "real number",
+		"documentation": "",
+		"detail": "real",
+		"kind": "Keyword"
+	},
+	{
+		"name": "string",
+		"tooltip": "string",
+		"documentation": "string object",
+		"detail": "string object",
+		"kind":"Keyword"
+	},
+	{
+		"name": "mesh",
+		"tooltip": "bi-dimensional (2D) finite element mesh",
+		"documentation": "TODO: voir le cours",
+		"detail": "2D finite element mesh",
+		"kind": "Variable"
+	},
+	{
+		"name": "fespace",
+		"tooltip": "2D finite element space",
+		"documentation": "TODO: voir le cours",
+		"detail": "2D finite element space",
+		"kind": "Variable"
+	},
+	{
+		"name": "func",
+		"tooltip": "Analytical function",
+		"documentation": "TODO: voir le cours",
+		"detail": "Analytical function",
+		"kind": "Variable"
+	}
+]

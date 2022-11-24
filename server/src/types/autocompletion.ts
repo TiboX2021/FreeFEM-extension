@@ -1,6 +1,32 @@
 import { CompletionItem, CompletionItemKind } from "vscode-languageserver";
 import { types_names } from "./types";
 
+import types from "./new_types.json";
+
+/** JSON data format for keywords */
+interface KeywordFormat {
+    name: string;
+    tooltip: string;
+    documentation: string;
+    detail: string;
+    kind: string;
+}
+
+// TODO: est-ce que cette interface est nécessaire? Oui, ça va définir l'output
+interface KeywordData {
+    name: string;
+    documentation: string;
+}
+
+/**
+ * A terme: toutes les fonctions pour exploiter les objets json seront là dedans
+ *
+ * données à stocker
+ * il faut parser le tooltip, ? Pour l'instant, ne rien parser du tout
+ *
+ *
+ */
+
 /**
  * Generate all autocompletion items
  */
@@ -9,55 +35,41 @@ abstract class CompletionItemGenerator {
 
     public static keywords: [string] = [""]; // data attribute === index in this array
 
-    public static createCompletionItem(name: string): CompletionItem {
+    public static data: [] = []; // TODO: store data inside (slightly format KeywordFormat)
+
+    public static createCompletionItem(entry: KeywordFormat): CompletionItem {
         CompletionItemGenerator.id_counter++;
 
-        this.keywords.push(name);
+        this.keywords.push(entry.name);
 
+        // TODO: parse properly, do not return anything?
         return {
-            label: name,
-            kind: CompletionItemKind.Field,
-            data: CompletionItemGenerator.id_counter,
+            label: entry.name,
+            // TODO: finir ça
         };
+    }
+
+    public static createCompletionItems(entries: KeywordFormat[]) {
+        for (const entry of entries) {
+            CompletionItemGenerator.createCompletionItem(entry);
+        }
     }
 }
 
-interface KeywordData {
-    name: string;
-    documentation: string;
+// PARSE TYPES
+CompletionItemGenerator.createCompletionItems(types);
+
+// TODO : same for functions, etc
+
+// Use the static class
+export function getCompletionItems(): CompletionItem[] {
+    return []; // TODO: return completion items for 'onCompletion'
 }
 
-// DEUX CHOSES:
-// LISTE DES KEYWORDS (index == data)
-// MAP KEYWORD -> DATA
-
-// On completion
-// On completion resolve
-
-/*
-Remarque: il faut un type de données centralisé!
-il associe au keyword toutes ses infos
-
-il faut aussi pouvoir y accéder via data
-
-
-*/
-
-// Ajout des types
-const onCompletionTypesArray = types_names.map((type) => {
-    return CompletionItemGenerator.createCompletionItem(type);
-});
-
-// Remarque: les details apparaissent brièvement, la doc apparaît si on clique
-
-export const onCompletionArray: CompletionItem[] = [...onCompletionTypesArray];
-
-/**
- * Return more detailed info about the item to be autocompleted
- */
 export function resolveCompletion(item: CompletionItem): CompletionItem {
-    item.detail = CompletionItemGenerator.keywords[item.data];
-    item.documentation = CompletionItemGenerator.keywords[item.data];
+    const id = item.data;
+
+    // Chopper les données dans data puis renvoyer ce qui va bien
 
     return item;
 }

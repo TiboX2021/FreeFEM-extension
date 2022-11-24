@@ -230,12 +230,12 @@ connection.onCompletion(
         return [
             {
                 label: "TypeScript",
-                kind: CompletionItemKind.Enum, // La classe: permet de classifier les items, pour plus de clarté
+                kind: CompletionItemKind.Variable, // La classe: permet de classifier les items, pour plus de clarté
                 data: -2,
             },
             {
                 label: "JavaScript",
-                kind: CompletionItemKind.Text,
+                kind: CompletionItemKind.Unit,
                 data: -1,
             },
             ...onCompletionArray,
